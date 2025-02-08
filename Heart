@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我一直相信你 ❤️</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+ 
+        .container {
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #fce7f3, #fbcfe8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+ 
+        .heart-container {
+            position: relative;
+            z-index: 10;
+            animation: scale 2s ease-in-out infinite;
+        }
+ 
+        .heart {
+            width: 160px;
+            height: 160px;
+            position: relative;
+            animation: beat 2s ease-in-out infinite;
+        }
+ 
+        .glow {
+            position: absolute;
+            inset: -20px;
+            filter: blur(20px);
+            background: radial-gradient(circle at center, rgba(249, 168, 212, 0.8), rgba(249, 168, 212, 0));
+            animation: glow 3s ease-in-out infinite;
+        }
+ 
+        .message {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #db2777;
+            text-align: center;
+            margin-top: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+            text-shadow: 0 0 10px rgba(219, 39, 119, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+ 
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+ 
+        .particle {
+            position: absolute;
+            background: #fda4af;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+ 
+        .beam {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 4px;
+            height: 200%;
+            background: linear-gradient(180deg, transparent, rgba(255,192,203,0.2), transparent);
+            transform-origin: center;
+            animation: rotate 20s linear infinite;
+        }
+ 
+        @keyframes scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+ 
+        @keyframes beat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+ 
+        @keyframes glow {
+            0%, 100% { opacity: 0.5; transform: scale(0.8); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+ 
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+ 
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+ 
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+ 
+        .floating-heart {
+            position: absolute;
+            color: #fda4af;
+            opacity: 0.2;
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Light beams -->
+        <div id="beams"></div>
+        
+        <!-- Floating hearts -->
+        <div id="floating-hearts"></div>
+        
+        <!-- Particles -->
+        <div id="particles"></div>
+        
+        <!-- Main heart -->
+        <div class="heart-container">
+            <div class="glow"></div>
+            <svg class="heart" viewBox="0 0 512 512">
+                <defs>
+                    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color: #fda4af"/>
+                        <stop offset="100%" style="stop-color: #db2777"/>
+                    </linearGradient>
+                </defs>
+                <path 
+                    d="M256 448l-30.164-27.211C118.718 322.442 48 258.61 48 179.095 48 114.221 97.918 64 162.4 64c36.399 0 70.717 16.742 93.6 43.947C278.882 80.742 313.199 64 349.6 64 414.082 64 464 114.221 464 179.095c0 79.516-70.719 143.348-177.836 241.694L256 448z"
+                    fill="url(#heartGradient)"
+                />
+            </svg>
+        </div>
+        
+        <!-- Message -->
+        <div class="message">我一直相信你</div>
+    </div>
+ 
+    <script>
+        // 创建光束
+        const beamsContainer = document.getElementById('beams');
+        for (let i = 0; i < 6; i++) {
+            const beam = document.createElement('div');
+            beam.className = 'beam';
+            beam.style.transform = `translate(-50%, -50%) rotate(${i * 60}deg)`;
+            beam.style.animationDelay = `${i * -3}s`;
+            beamsContainer.appendChild(beam);
+        }
+ 
+        // 创建漂浮的心形
+        const heartsContainer = document.getElementById('floating-hearts');
+        for (let i = 0; i < 12; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = '♥';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.top = `${Math.random() * 100}%`;
+            heart.style.fontSize = `${12 + Math.random() * 8}px`;
+            heart.style.animationDelay = `${Math.random() * 2}s`;
+            heartsContainer.appendChild(heart);
+        }
+ 
+        // 创建粒子系统
+        const particlesContainer = document.getElementById('particles');
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = 2 + Math.random() * 3;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            const startX = 50 + (Math.random() - 0.5) * 20;
+            const startY = 50 + (Math.random() - 0.5) * 20;
+            particle.style.left = `${startX}%`;
+            particle.style.top = `${startY}%`;
+            
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 50 + Math.random() * 50;
+            const duration = 2000 + Math.random() * 1000;
+            
+            particle.style.opacity = 0.6 + Math.random() * 0.4;
+            
+            particlesContainer.appendChild(particle);
+            
+            const animation = particle.animate([
+                { transform: 'translate(0, 0) scale(1)', opacity: particle.style.opacity },
+                { 
+                    transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`,
+                    opacity: 0 
+                }
+            ], {
+                duration: duration,
+                easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                fill: 'forwards'
+            });
+            
+            animation.onfinish = () => {
+                particle.remove();
+                createParticle();
+            };
+        }
+ 
+        // 初始化粒子
+        for (let i = 0; i < 30; i++) {
+            createParticle();
+        }
+    </script>
+</body>
+</html>
